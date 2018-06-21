@@ -1,0 +1,24 @@
+    if not Config.objects.all()[0].signals_enabled:
+        return 
+    print(instance.file)        
+    csv.register_dialect('myDialect',
+    delimiter = ',',
+    quoting=csv.QUOTE_ALL,
+    skipinitialspace=True)
+    spamreader = csv.reader(instance.file, dialect='myDialect')
+    for row in spamreader:
+        print("ROW is: ", row)
+        #row = row[0].split(",")        
+        #row = row.split(",")
+        try:
+            BillApiCustom.objects.get(
+                payee_id=row[0],
+                payee_name=row[1],
+                payee_type=row[2]
+                )
+        except:
+            BillApiCustom(
+                payee_id=row[0],
+                payee_name=row[1],
+                payee_type=row[2]
+                ).save()
